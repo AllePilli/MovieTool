@@ -27,7 +27,13 @@ data class SubtitleFile(val subtitles: MutableList<Subtitle> = mutableListOf()){
 
                 while (line != ""){
                     subtitle.lines.add(line)
-                    line = scanner.nextLine()
+
+                    if (scanner.hasNextLine()){
+                        line = scanner.nextLine()
+                    }else{
+                        subtitles.add(subtitle)
+                        return SubtitleFile(subtitles)
+                    }
                 }
 
                 subtitles.add(subtitle)

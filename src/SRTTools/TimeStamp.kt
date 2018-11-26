@@ -5,11 +5,11 @@ data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var mil
         fun toFormat(time: String): List<Int>{
             val topPartsStr = time.split(",")
             val parts = topPartsStr[0].split(":").map { it.toInt() }
-            val topParts = topPartsStr.map { it.toInt() }
+            val topParts = topPartsStr[1].map { it.toInt() }
 
-            if (topParts.size != 2) throw InvalidTimestampFormatException()
+            if (topPartsStr.size != 2) throw InvalidTimestampFormatException("$topParts")
 
-            if (parts.size != 3) throw InvalidTimestampFormatException()
+            if (parts.size != 3) throw InvalidTimestampFormatException("$parts")
             return parts + topParts
         }
     }
