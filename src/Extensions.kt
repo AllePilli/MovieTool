@@ -9,6 +9,9 @@ import java.nio.file.StandardCopyOption
  */
 fun File.pureName() = if (this.isFile) this.name.split(this.extension)[0] else this.absolutePath
 
+/**
+ * Checks if a file contains other directories
+ */
 fun File.containsDirs(): Boolean{
     var contains = false
     if (isDirectory) walkTopDown().forEach { file -> if (file.isDirectory) contains = true }
