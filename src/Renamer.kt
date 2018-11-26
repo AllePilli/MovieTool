@@ -5,7 +5,10 @@ class Renamer{
         fun start(path: String, epPrefix: String, name: String){
             val dir = File(path)
             dir.walkTopDown().forEach {
-                if (it.isFile) it.renameTo(File("${path}\\${epPrefix}-${name}.${it.extension}"))
+                if (it.isFile) {
+                    it.renameTo(File("${path}\\${epPrefix}-${name}.${it.extension}"))
+                    println("Renamed ${it.name}")
+                }
             }
         }
     }
