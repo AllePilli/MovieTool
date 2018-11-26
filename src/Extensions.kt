@@ -9,6 +9,13 @@ import java.nio.file.StandardCopyOption
  */
 fun File.pureName() = if (this.isFile) this.name.split(this.extension)[0] else this.absolutePath
 
+fun File.containsDirs(): Boolean{
+    var contains = false
+    if (isDirectory) walkTopDown().forEach { file -> if (file.isDirectory) contains = true }
+
+    return contains
+}
+
 /**
  * return true if the Path points to an existing file
  */
@@ -24,6 +31,9 @@ fun Path.isFile() = !Files.isDirectory(this)
  */
 fun Path.isDirectory() = !isFile()
 
+/**
+ * moves the a file to the destination path
+ */
 fun Path.move(dest: Path, overwrite: Boolean = false): Boolean{
     return if (isFile()){
         if (dest.exists()){
