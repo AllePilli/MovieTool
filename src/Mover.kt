@@ -9,7 +9,7 @@ class Mover{
         fun start(sourceUrl: String, destUrl: String){
             val src = Paths.get(sourceUrl)
             var episode: String
-            var destFile = File(destUrl)
+            var destFile = File("")
 
             if (src.isDirectory()){
                 val dir = File(sourceUrl)
@@ -20,10 +20,7 @@ class Mover{
                         if (firstTime){
                             firstTime = false
                             episode = it.pureName().split("-")[0].split("x")[1]
-                            destFile.mkdir()
-                            destFile = File(destFile, episode)
-
-                            Files.createDirectory(destFile.toPath())
+                            destFile = createDirectory(episode, destUrl)
                         }
 
                         move("$sourceUrl\\${it.name}", destFile.absolutePath)
@@ -31,9 +28,7 @@ class Mover{
                 }
             }else{
                 episode = File(sourceUrl).pureName().split("-")[0].split("x")[1]
-                destFile.mkdir()
-                destFile = File(destFile, episode)
-                Files.createDirectory(destFile.toPath())
+                destFile = createDirectory(episode, destUrl)
 
                 move(sourceUrl, destFile.absolutePath)
             }
@@ -41,7 +36,13 @@ class Mover{
 
         fun createDirectory(name: String, directoryPath: String) = createDirectory(name, File(directoryPath))
 
-        fun createDirectory(name: String, directory: File) = createTempDir(name, "", directory)
+        fun createDirectory(name: String, directory: File): File{
+            var dir = directory
+            dir.mkdir()
+            dir = File(dir, name)
+            Files.createDirectory(dir.toPath())
+            return dir
+        }
 
         private fun move(sourceUrl: String, destUrl: String){
             val src = Paths.get(sourceUrl)
