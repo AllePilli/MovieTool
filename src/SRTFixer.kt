@@ -15,8 +15,8 @@ class SRTFixer{
             // ads always have a website or contain "=="
             subFile.subtitles.forEach { subtitle ->
                 var reclame = false
-                subtitle.lines.forEach { line -> if (line.contains("www.") || line.contains("==")) reclame = true }
-                if (reclame) toRemove.add(subtitle)//subFile.subtitles.remove(subtitle)
+                subtitle.lines.forEach { line -> if (line.contains("www.") || line.contains("==") || line.contains(".com") || line.contains(".COM")) reclame = true }
+                if (reclame) toRemove.add(subtitle)
             }
 
             toRemove.forEach { sub ->

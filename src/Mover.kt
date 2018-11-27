@@ -1,3 +1,5 @@
+import Functions.Companion.createDirectory
+import Functions.Companion.move
 import Functions.Companion.prompt
 import java.io.File
 import java.nio.file.Files
@@ -31,33 +33,6 @@ class Mover{
                 destFile = createDirectory(episode, destUrl)
 
                 move(sourceUrl, destFile.absolutePath)
-            }
-        }
-
-        fun createDirectory(name: String, directoryPath: String) = createDirectory(name, File(directoryPath))
-
-        fun createDirectory(name: String, directory: File): File{
-            var dir = directory
-            dir.mkdir()
-            dir = File(dir, name)
-            Files.createDirectory(dir.toPath())
-            return dir
-        }
-
-        private fun move(sourceUrl: String, destUrl: String){
-            val src = Paths.get(sourceUrl)
-            val name = File(sourceUrl).name
-            val dest = Paths.get("$destUrl\\$name")
-
-            if (dest.exists()){
-                val answer = prompt("$name already exists in $destUrl! Replace (y/n)?")
-                if (answer.toLowerCase() == "y"){
-                    src.move(dest, true)
-                    println("Moving $name complete")
-                }else println("Canceled $name...")
-            }else{
-                src.move(dest)
-                println("Moving $name complete")
             }
         }
     }
