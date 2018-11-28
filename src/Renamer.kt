@@ -6,8 +6,7 @@ class Renamer{
             val dir = File(path)
             dir.walkTopDown().forEach {
                 if (it.isFile) {
-                    it.renameTo(File("${path}\\${epPrefix}-${name}.${it.extension}"))
-                    println("Renamed ${it.name}")
+                    if(it.renameTo(File("${path}\\${epPrefix}-${name}.${it.extension}"))) println("Renamed ${it.name}")
                 }
             }
         }

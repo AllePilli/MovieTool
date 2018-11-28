@@ -8,7 +8,7 @@ class Functions{
          * Prompt user with a message, and wait for an answer
          */
         fun prompt(msg: String): String{
-            print("$msg =>")
+            print("$msg => ")
             return readLine() ?: ""
         }
 

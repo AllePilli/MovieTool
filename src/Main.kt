@@ -1,35 +1,52 @@
+import Functions.Companion.prompt
 import SRTTools.TimeStamp
-
-val options = listOf("-r")
+import javax.swing.JFileChooser
+import javax.swing.filechooser.FileSystemView
 
 fun main(args: Array<String>){
-    val fnc = args[0]
-    val i = amtOfOptions(args)
+    val jfc = JFileChooser(FileSystemView.getFileSystemView().homeDirectory)
+    jfc.dialogTitle = "Choose directory: "
+    jfc.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 
-    when (fnc){
+    when (prompt("Function?")){
         "prep" -> { // Rename file and remove ads: prep [-r] path epPrefix newName
-            Renamer.start(args[1 + i], args[2 + i], args[3 + i])
-            if (args.contains("-r")) SRTFixer.removeAds(args[2], true)
-            else SRTFixer.removeAds(args[1])
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                val path = jfc.selectedFile.absolutePath
+                Renamer.start(path, prompt("Episode prefix = ?"), prompt("New name = ?"))
+                SRTFixer.removeAds(path, prompt("Recursive prep? [y/n]").toLowerCase() == "y")
+            }else throw IllegalArgumentException("Must choose a directory for prep function")
         }
-        "ren" -> Renamer.start(args[1], args[2], args[3]) // Rename files in directory: ren path epPrefix newName
-        "mov" -> Mover.start(args[1], args[2]) // Move the file from sourceUrl to destUrl: mov src dest
+        "ren" -> { // Rename files in directory: ren path epPrefix newName
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                Renamer.start(jfc.selectedFile.absolutePath, prompt("Episode prefix = ?"), prompt("New name = ?"))
+            }else throw IllegalArgumentException("Must choose a directory for ren function")
+        }
+        "mov" -> { // Move the file from sourceUrl to destUrl: mov src dest
+            jfc.dialogTitle = "Choose source directory: "
+
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                val src = jfc.selectedFile.absolutePath
+                jfc.dialogTitle = "Choose destination directory: "
+
+                if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                    val dest = jfc.selectedFile.absolutePath
+                    Mover.start(src, dest)
+                }else throw IllegalArgumentException("Destination must be a directory")
+            }else throw IllegalArgumentException("Source must be a directory")
+        }
         "rad" -> { // Remove ads from srt file: rad [-r] path
-            if (args.contains("-r")) SRTFixer.removeAds(args[2], true)
-            else SRTFixer.removeAds(args[1])
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                SRTFixer.removeAds(jfc.selectedFile.absolutePath, prompt("Recursive? [y/n]").toLowerCase() == "y")
+            }
         }
         "sh" -> { // sh [-r] path [-]00:00:00,000
-            var recursive = false
-            if (args.contains("-r")) recursive = true
-
-            if (args[2 + i].contains("-")) SRTFixer.shift(args[1 + i], TimeStamp(TimeStamp.toFormat(args[2 + i].substring(1, args[2 + i].length))), false, recursive)
-            else SRTFixer.shift(args[1 + i], TimeStamp(TimeStamp.toFormat(args[2 + i])), true, recursive)
+            if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
+                SRTFixer.shift(jfc.selectedFile.absolutePath,
+                    TimeStamp(TimeStamp.toFormat(prompt("Timestamp = ?"))),
+                    prompt("Forward? [y/n]").toLowerCase() == "y",
+                    prompt("Recursice? [y/n]").toLowerCase() == "y")
+            }
         }
+        else -> throw IllegalArgumentException("Not a function")
     }
-}
-
-private fun amtOfOptions(args: Array<String>): Int{
-    var amt = 0
-    options.forEach { opt -> if (args.contains(opt)) amt++ }
-    return amt
 }
