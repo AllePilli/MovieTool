@@ -1,5 +1,7 @@
 package SRTTools
 
+import kotlin.math.min
+
 data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var milliseconds: Int){
     companion object {
         fun toFormat(time: String): List<Int>{
@@ -43,5 +45,41 @@ data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var mil
         diff.minutes = minutes - timeStamp.minutes
         diff.hours = hours - timeStamp.hours
         return diff
+    }
+
+    operator fun plus(timeStamp: TimeStamp): TimeStamp{
+        val sum = TimeStamp(0, 0, 0, 0)
+
+        sum.hours = timeStamp.hours + hours
+
+        sum.minutes = timeStamp.minutes + minutes
+        if (sum.minutes > 59) sum.hours++
+        sum.minutes %= 60
+
+        sum.seconds = timeStamp.seconds + seconds
+        if (sum.seconds > 59){
+            sum.minutes++
+            if (sum.minutes > 59) {
+                sum.hours++
+            }
+        }
+        sum.seconds %= 60
+        sum.minutes %= 60
+
+        sum.milliseconds = timeStamp.milliseconds + milliseconds
+        if (sum.milliseconds > 999){
+            sum.seconds++
+            if (sum.seconds > 59){
+                sum.minutes++
+                if (sum.minutes > 59) {
+                    sum.hours++
+                }
+            }
+        }
+        sum.milliseconds %= 1000
+        sum.seconds %= 60
+        sum.minutes %= 60
+
+        return sum
     }
 }
