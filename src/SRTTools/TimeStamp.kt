@@ -21,7 +21,7 @@ data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var mil
     fun compile() = "${String.format("%02d", hours)}:${String.format("%02d", minutes)}:${String.format("%02d", seconds)},${String.format("%03d", milliseconds)}"
 
     operator fun minus(timeStamp: TimeStamp): TimeStamp{
-        val diff = TimeStamp(0, 0, 0, 0)
+        var diff = TimeStamp(0, 0, 0, 0)
 
         if (timeStamp.milliseconds > milliseconds){
             --seconds
@@ -44,6 +44,8 @@ data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var mil
 
         diff.minutes = minutes - timeStamp.minutes
         diff.hours = hours - timeStamp.hours
+
+        if (diff.hours < 0 || diff.minutes < 0 || diff.seconds < 0 || diff.milliseconds < 0) diff = TimeStamp(24, 0, 0, 0) + diff
         return diff
     }
 
@@ -79,6 +81,7 @@ data class TimeStamp(var hours: Int, var minutes: Int, var seconds: Int, var mil
         sum.milliseconds %= 1000
         sum.seconds %= 60
         sum.minutes %= 60
+        sum.hours %= 24
 
         return sum
     }

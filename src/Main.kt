@@ -1,3 +1,5 @@
+import SRTTools.TimeStamp
+
 val options = listOf("-r")
 
 fun main(args: Array<String>){
@@ -15,6 +17,13 @@ fun main(args: Array<String>){
         "rad" -> { // Remove ads from srt file: rad [-r] path
             if (args.contains("-r")) SRTFixer.removeAds(args[2], true)
             else SRTFixer.removeAds(args[1])
+        }
+        "sh" -> { // sh [-r] path [-]00:00:00,000
+            var recursive = false
+            if (args.contains("-r")) recursive = true
+
+            if (args[2 + i].contains("-")) SRTFixer.shift(args[1 + i], TimeStamp(TimeStamp.toFormat(args[2 + i].substring(1, args[2 + i].length))), false, recursive)
+            else SRTFixer.shift(args[1 + i], TimeStamp(TimeStamp.toFormat(args[2 + i])), true, recursive)
         }
     }
 }

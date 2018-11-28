@@ -24,6 +24,12 @@ internal class TimeStampTest {
         expected = TimeStamp(2, 49, 40, 0)
 
         assertEquals(expected, first - second)
+
+        first = TimeStamp(3, 0, 0, 0)
+        second = TimeStamp(4, 50, 20, 0)
+        expected = TimeStamp(22, 9, 40, 0)
+
+        assertEquals(expected, first - second)
     }
 
     @org.junit.jupiter.api.Test
