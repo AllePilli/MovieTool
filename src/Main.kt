@@ -15,14 +15,14 @@ fun main(args: Array<String>){
         {
             if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                 val path = jfc.selectedFile.absolutePath
-                Renamer.start(path, prompt("Episode prefix?"), prompt("New name?"))
+                Renamer.start(path, prompt("New name?"))
                 SRTFixer.removeAds(path, prompt("Recursive prep? [y/n]").toLowerCase() == "y")
             }else throw IllegalArgumentException("Must choose a directory for prep function")
         }
         "ren" ->
         {
             if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                Renamer.start(jfc.selectedFile.absolutePath, prompt("Episode prefix?"), prompt("New name?"))
+                Renamer.start(jfc.selectedFile.absolutePath, prompt("New name?"))
             }else throw IllegalArgumentException("Must choose a directory for ren function")
         }
         "mov" ->
@@ -57,8 +57,8 @@ fun main(args: Array<String>){
         }
         "help" ->
         {
-            println("prep \t Rename file and remove ads: prep [-r] path epPrefix newName")
-            println("ren \t Rename files in directory: ren path epPrefix newName")
+            println("prep \t Rename file and remove ads: prep [-r] path newName")
+            println("ren \t Rename files in directory: ren path newName")
             println("mov \t Move the file from sourceUrl to destUrl and create appropriate folder: mov src dest")
             println("rad \t Remove ads from srt file: rad [-r] path")
             println("sh \t shift subtitle of srt file: sh [-r] path [-]00:00:00,000")
