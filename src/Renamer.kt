@@ -4,10 +4,10 @@ import java.io.File
 class Renamer{
     companion object {
         fun start(path: String, name: String){
+            val regex = "S\\d\\dE\\d\\d".toRegex()
             val dir = File(path)
             dir.walkTopDown().forEach {
                 if (it.isFile) {
-                    val regex = "S\\d\\dE\\d\\d".toRegex()
                     val match = regex.find(it.pureName())
                     val epPrefix: String
 
