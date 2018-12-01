@@ -15,7 +15,7 @@ class SRTFixer{
 
             subFile.subtitles.forEach { subtitle ->
                 var reclame = false
-                subtitle.lines.forEach { line -> if (line.contains("www.") || line.contains("==") || line.contains(".com") || line.contains(".COM")) reclame = true }
+                subtitle.lines.forEach { line -> if (line.contains("www.") || line.contains("==") || line.contains(".com") || line.contains(".COM") || line.contains(".org") || line.contains(".net")) reclame = true }
                 if (reclame) toRemove.add(subtitle)
             }
 
