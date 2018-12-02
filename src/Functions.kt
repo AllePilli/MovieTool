@@ -6,6 +6,7 @@ class Functions{
     companion object {
         /**
          * Prompt user with a message, and wait for an answer
+         * @param msg: message to display
          */
         fun prompt(msg: String): String{
             print("$msg => ")
@@ -13,12 +14,18 @@ class Functions{
         }
 
         /**
-         * creates a directory from a String, and returns it
+         * creates a directory from a String
+         * @return the new directory
+         * @param name: the name of the new directory
+         * @param directoryPath: the path of the new directory
          */
         fun createDirectory(name: String, directoryPath: String) = createDirectory(name, File(directoryPath))
 
         /**
-         * Creates a directory from a File, and returns it
+         * Creates a directory from a File
+         * @return the new directory
+         * @param name: the name of the new directory
+         * @param directory: the parent directory of the new directory
          */
         fun createDirectory(name: String, directory: File): File {
             var dir = directory
@@ -30,6 +37,8 @@ class Functions{
 
         /**
          * Moves a File from sourceUrl to destUrl
+         * @param sourceUrl: path of the file to move
+         * @param destUrl: the new path of the file after moving
          */
         fun move(sourceUrl: String, destUrl: String){
             val src = Paths.get(sourceUrl)

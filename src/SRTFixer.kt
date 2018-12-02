@@ -3,7 +3,6 @@ import SRTTools.Subtitle
 import SRTTools.SubtitleFile
 import SRTTools.TimeStamp
 import java.io.File
-import java.nio.file.Path
 
 class SRTFixer{
     companion object {

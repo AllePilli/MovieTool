@@ -1,9 +1,6 @@
 import Functions.Companion.createDirectory
 import Functions.Companion.move
-import Functions.Companion.prompt
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 
 class Mover{
