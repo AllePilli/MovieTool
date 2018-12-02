@@ -27,18 +27,12 @@ fun main(args: Array<String>){
         }
         "mov" ->
         {
-            jfc.dialogTitle = "Choose source directory: "
+            jfc.dialogTitle = "Choose Serie: "
+            jfc.currentDirectory = File("Y:\\Film")
 
             if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                val src = jfc.selectedFile.absolutePath
-                jfc.dialogTitle = "Choose destination directory: "
-                jfc.currentDirectory = File("Y:\\Film")
-
-                if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                    val dest = jfc.selectedFile.absolutePath
-                    Mover.start(src, dest)
-                }else throw IllegalArgumentException("Destination must be a directory")
-            }else throw IllegalArgumentException("Source must be a directory")
+                Mover.start("${System.getProperty("user.home")}\\Videos\\Movies\\ToMove", jfc.selectedFile.absolutePath)
+            }else throw IllegalArgumentException("Destination must be a directory")
         }
         "rad" ->
         {
@@ -59,7 +53,7 @@ fun main(args: Array<String>){
         {
             println("prep \t Rename file and remove ads: prep [-r] path newName")
             println("ren \t Rename files in directory: ren path newName")
-            println("mov \t Move the file from sourceUrl to destUrl and create appropriate folder: mov src dest")
+            println("mov \t Move the file from ToMove folder to destUrl and create appropriate folders: mov src dest")
             println("rad \t Remove ads from srt file: rad [-r] path")
             println("sh \t shift subtitle of srt file: sh [-r] path [-]00:00:00,000")
             println("help \t list all commands: help")

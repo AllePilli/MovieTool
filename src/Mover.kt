@@ -11,6 +11,7 @@ class Mover{
         fun start(sourceUrl: String, destUrl: String){
             val src = Paths.get(sourceUrl)
             var episode: String
+            var season: String
             var destFile = File("")
 
             if (src.isDirectory()){
@@ -22,7 +23,14 @@ class Mover{
                         if (firstTime){
                             firstTime = false
                             episode = it.pureName().split("-")[0].split("x")[1]
-                            destFile = createDirectory(episode, destUrl)
+                            season = it.pureName().split("-")[0].split("x")[0]
+
+                            if (season.length == 1) season = "S0$season"
+                            else season = "S$season"
+
+                            if (!File("${destUrl}\\$season").exists()) createDirectory(season, destUrl)
+
+                            destFile = createDirectory(episode, "${destUrl}\\$season")
                         }
 
                         move("$sourceUrl\\${it.name}", destFile.absolutePath)
@@ -30,6 +38,13 @@ class Mover{
                 }
             }else{
                 episode = File(sourceUrl).pureName().split("-")[0].split("x")[1]
+                season = File(sourceUrl).pureName().split("-")[0].split("x")[0]
+
+                if (season.length == 1) season = "S0$season"
+                else season = "S$season"
+
+                if (!File("${destUrl}\\$season").exists()) createDirectory(season, destUrl)
+
                 destFile = createDirectory(episode, destUrl)
 
                 move(sourceUrl, destFile.absolutePath)
