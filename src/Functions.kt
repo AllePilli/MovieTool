@@ -9,7 +9,7 @@ class Functions{
          * @param msg: message to display
          */
         fun prompt(msg: String): String{
-            print("$msg => ")
+            print(msg)
             return readLine() ?: ""
         }
 
