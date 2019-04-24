@@ -2,37 +2,29 @@ import Functions.Companion.prompt
 import java.io.File
 
 class Renamer{
-    companion object {
-        fun start(path: String, name: String){
-            val regex = "S\\d\\dE\\d\\d".toRegex()
+    companion object {//TODO: multiple files renamed at the same time
+        private val SE_REGEX = "[sS]\\d{2}[eE]\\d{2}|[1-9][xX]\\d{2}".toRegex()
+
+        fun start(path: String){
             val dir = File(path)
-            dir.walkTopDown().forEach {
-                if (it.isFile) {
-                    var match = regex.find(it.pureName())
-                    val epPrefix: String
+            val done = hashMapOf<String, String>()
 
-                    if (match != null){
-                        val value = match.value
-                        var s = value.substring(1, 3)
-                        val e = value.substring(3, value.length).substring(1, 3)
-                        if (s[0] == '0') s = s.substring(1, s.length)
+            dir.walkTopDown().filter { !it.isDirectory }.forEach { file ->
+                val match = SE_REGEX.find(file.pureName())
+                val epPrefix = if (match != null){
+                    val matchedVal = match.value
+                    var s = matchedVal.substring(1, 3)
+                    val e = matchedVal.substring(3).substring(1, 3)
+                    if (s[0] == '0') s = s.substring(1)
 
-                        epPrefix = "${s}x$e"
-                    }else {
-                        match = "s\\d\\de\\d\\d".toRegex().find(it.pureName())
+                    "${s}x$e"
+                }else "${prompt("Season? => ")}x${prompt("Episode? => ")}"
 
-                        if (match != null){
-                            val value = match.value
-                            var s = value.substring(1, 3)
-                            val e = value.substring(3, value.length).substring(1, 3)
-                            if (s[0] == '0') s = s.substring(1, s.length)
+                if (done[epPrefix] == null) done[epPrefix] = prompt("Name of $epPrefix? => ")
 
-                            epPrefix = "${s}x$e"
-                        }else epPrefix = prompt("Episode prefix?")
-                    }
+                val name = done[epPrefix]!!
 
-                    if(it.renameTo(File("${path}\\${epPrefix}-${name}.${it.extension}"))) println("Renamed ${it.name}")
-                }
+                if (file.renameTo(File("$path\\$epPrefix-$name.${file.extension}"))) println("Renamed ${file.name}")
             }
         }
     }
