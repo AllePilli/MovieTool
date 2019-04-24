@@ -12,30 +12,30 @@ fun main() {
 
     var func: String? = null
 
-    while (!{ func = prompt(" $> "); func }().equals("q", ignoreCase = true)){
+    while (!{ func = prompt("MovieTool$> "); func }().equals("q", ignoreCase = true)){
         when (func){
             "prep" ->
             {
                 if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     val path = jfc.selectedFile.absolutePath
-                    Renamer.start(path, prompt("New name? => "))
+                    Renamer.start(path)
                     SRTFixer.removeAds(path, prompt("Recursive prep? [y/n] ").toLowerCase() == "y")
-                }else throw IllegalArgumentException("Must choose a directory for prep function")
+                }else println("Must choose a directory for prep function")
             }
             "ren" ->
             {
                 if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
-                    Renamer.start(jfc.selectedFile.absolutePath, prompt("New name? => "))
-                }else throw IllegalArgumentException("Must choose a directory for ren function")
+                    Renamer.start(jfc.selectedFile.absolutePath)
+                }else println("Must choose a directory for ren function")
             }
             "mov" ->
             {
-                jfc.dialogTitle = "Choose Serie: "
+                jfc.dialogTitle = "Choose Series: "
                 jfc.currentDirectory = File("Y:\\Film")
 
                 if (jfc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION){
                     Mover.start("${System.getProperty("user.home")}\\Videos\\Movies\\ToMove", jfc.selectedFile.absolutePath)
-                }else throw IllegalArgumentException("Destination must be a directory")
+                }else println("Destination must be a directory: ${jfc.selectedFile.pureName()}")
             }
             "rad" ->
             {
@@ -49,7 +49,7 @@ fun main() {
                     SRTFixer.shift(jfc.selectedFile.absolutePath,
                         TimeStamp(TimeStamp.toFormat(prompt("Timestamp [00:00:00,000]? => "))),
                         prompt("Forward? [y/n] ").toLowerCase() == "y",
-                        prompt("Recursice? [y/n] ").toLowerCase() == "y")
+                        prompt("Recursive? [y/n] ").toLowerCase() == "y")
                 }
             }
             "help" ->
@@ -60,8 +60,9 @@ fun main() {
                 println("\trad \t Remove ads from srt file: rad [-r] path")
                 println("\tsh \t shift subtitle of srt file: sh [-r] path [-]00:00:00,000")
                 println("\thelp \t list all commands: help")
+                println("\tq \tquit")
             }
-            else -> throw IllegalArgumentException("Not a function")
+            else -> println("$func is not a function")
         }
     }
 }
